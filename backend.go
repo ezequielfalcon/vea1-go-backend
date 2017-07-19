@@ -1,7 +1,10 @@
 package main
 
-import "github.com/gin-gonic/gin"
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
 	router := gin.Default()
