@@ -24,7 +24,7 @@ type TokenStr struct {
 }
 
 func seguridadLogin(c *gin.Context) {
-	db, err := sql.Open("posgres", os.Getenv("DATABASE_URL"))
+	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
 		log.Fatal(err)
 		c.JSON(500, gin.H{"resultado": false, "mensaje": "Error en variables de entorno"})
