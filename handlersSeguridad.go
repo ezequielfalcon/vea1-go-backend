@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin/json"
+	_ "github.com/lib/pq"
 )
 
 type login struct {
