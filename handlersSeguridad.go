@@ -34,7 +34,6 @@ func seguridadLogin(c *gin.Context) {
 		if c.Bind(&form) == nil {
 			var idClienteInt string
 			var clave string
-			log.Println("Usuario: " + form.Usuario)
 			err := db.QueryRow("SELECT id_cliente_int, clave " +
 				"FROM usuarios WHERE nombre = $1;", form.Usuario).Scan(&idClienteInt, &clave)
 			if err != nil {
@@ -48,6 +47,8 @@ func seguridadLogin(c *gin.Context) {
 					c.JSON(500, gin.H{"resultado": false, "mensaje": "Error en BCRYPT"})
 				} else {
 					clienteDbHashString := string(clienteDbHash)
+					log.Println("Hash DB: " + clienteDbHashString)
+					log.Println("Hash FR: " + form.HashCliente)
 					if clienteDbHashString == form.HashCliente {
 						claveUsuarioByte := []byte(form.Clave)
 						claveUsuarioHash, err := bcrypt.GenerateFromPassword(claveUsuarioByte, bcrypt.DefaultCost)
