@@ -37,8 +37,7 @@ func seguridadLogin(c *gin.Context) {
 			err := db.QueryRow("SELECT id_cliente_int, clave " +
 				"FROM usuarios WHERE nombre = $1;", form.Usuario).Scan(&idClienteInt, &clave)
 			if err != nil {
-				log.Println(err)
-				c.JSON(500, gin.H{"resultado": false, "mensaje": err})
+				c.JSON(401, gin.H{"resultado": false, "mensaje": "Usuario no existe"})
 			} else {
 				clienteHashBytes := []byte(form.HashCliente)
 				clienteBytes := []byte(idClienteInt)
