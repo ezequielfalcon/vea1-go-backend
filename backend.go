@@ -4,6 +4,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"os"
+	_ "github.com/lib/pq"
 )
 
 func main() {
