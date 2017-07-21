@@ -40,61 +40,52 @@ func seguridadLogin(c *gin.Context) {
 				log.Println(err)
 				c.JSON(500, gin.H{"resultado": false, "mensaje": err})
 			} else {
-				clienteDbByte := []byte(idClienteInt)
-				clienteDbHash, err := bcrypt.GenerateFromPassword(clienteDbByte, bcrypt.DefaultCost)
-				if err != nil {
-					log.Println(err)
-					c.JSON(500, gin.H{"resultado": false, "mensaje": "Error en BCRYPT"})
+				clienteHashBytes := []byte(form.HashCliente)
+				clienteBytes := []byte(idClienteInt)
+				comparar := bcrypt.CompareHashAndPassword(clienteHashBytes, clienteBytes)
+				if comparar != nil {
+					log.Println(comparar)
+					c.JSON(401, gin.H{"resultado": false, "mensaje": "Usuario con hash de cliente inválido"})
 				} else {
-					clienteDbHashString := string(clienteDbHash)
-					log.Println("Hash DB: " + clienteDbHashString)
-					log.Println("Hash FR: " + form.HashCliente)
-					if clienteDbHashString == form.HashCliente {
-						claveUsuarioByte := []byte(form.Clave)
-						claveUsuarioHash, err := bcrypt.GenerateFromPassword(claveUsuarioByte, bcrypt.DefaultCost)
+					usuarioHashBytes := []byte(clave)
+					usuarioClaveBytes := []byte(form.Clave)
+					compararClave := bcrypt.CompareHashAndPassword(usuarioHashBytes, usuarioClaveBytes)
+					if compararClave != nil {
+						c.JSON(401, gin.H{"resultado": false, "mensaje": "Usuario o contraseña no válida"})
+					} else {
+						roles, err := db.Query("SELECT roles.nombre FROM roles INNER JOIN roles_por_usuario " +
+							"ON roles.id = roles_por_usuario.id_rol " +
+							"INNER JOIN usuarios on roles_por_usuario.usuario = usuarios.nombre " +
+							"WHERE usuarios.nombre = $1;"	, form.Usuario)
 						if err != nil {
-							log.Println(err)
-							c.JSON(500, gin.H{"resultado": false, "mensaje": "Error en BCRYPT"})
+							c.JSON(500, gin.H{"resultado": false, "mensaje": err})
 						} else {
-							hashString := string(claveUsuarioHash)
-							if hashString == clave {
-								roles, err := db.Query("SELECT roles.nombre FROM roles INNER JOIN roles_por_usuario " +
-									"ON roles.id = roles_por_usuario.id_rol " +
-									"INNER JOIN usuarios on roles_por_usuario.usuario = usuarios.nombre " +
-									"WHERE usuarios.nombre = $1;"	, form.Usuario)
+							rolesUsuario := make([]string, 0)
+							for roles.Next() {
+								var nombre string
+								roles.Scan(&nombre)
+								rolesUsuario = append(rolesUsuario, nombre)
+							}
+							tokenRaw := &TokenStr{
+								Usuario:    form.Usuario,
+								Roles:      rolesUsuario }
+							token := jwt.New(jwt.SigningMethodHS512)
+							tokenString, err := json.Marshal(tokenRaw)
+							if err != nil {
+								log.Println(err)
+								c.JSON(500, gin.H{"resultado": false, "mensaje": "Error en JSON"})
+							} else {
+								token.Raw = string(tokenString)
+								secret := os.Getenv("JWT_SECRET")
+								tokenFinal, err := token.SignedString(secret)
 								if err != nil {
-									c.JSON(500, gin.H{"resultado": false, "mensaje": err})
+									log.Println(err)
+									c.JSON(500, gin.H{"resultado": false, "mensaje": "Error en JWT"})
 								} else {
-									rolesUsuario := make([]string, 0)
-									for roles.Next() {
-										var nombre string
-										roles.Scan(&nombre)
-										rolesUsuario = append(rolesUsuario, nombre)
-									}
-									tokenRaw := &TokenStr{
-										Usuario:    form.Usuario,
-										Roles:      rolesUsuario }
-									token := jwt.New(jwt.SigningMethodHS512)
-									tokenString, err := json.Marshal(tokenRaw)
-									if err != nil {
-										log.Println(err)
-										c.JSON(500, gin.H{"resultado": false, "mensaje": "Error en JSON"})
-									}
-									token.Raw = string(tokenString)
-									secret := os.Getenv("JWT_SECRET")
-									tokenFinal, err := token.SignedString(secret)
-									if err != nil {
-										log.Println(err)
-										c.JSON(500, gin.H{"resultado": false, "mensaje": "Error en JWT"})
-									}
 									c.JSON(200, gin.H{"resultado": true, "mensaje": "Sesión iniciada!", "token": tokenFinal})
 								}
-							} else {
-								c.JSON(401, gin.H{"resultado": false, "mensaje": "Usuario o contraseña no válida"})
 							}
 						}
-					} else {
-						c.JSON(401, gin.H{"resultado": false, "mensaje": "Usuario con hash de cliente inválido"})
 					}
 				}
 			}
