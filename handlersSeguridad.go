@@ -34,16 +34,17 @@ func seguridadLogin(c *gin.Context) {
 		if c.Bind(&form) == nil {
 			var idClienteInt string
 			var clave string
+			log.Println("Usuario: " + form.usuario)
 			err := db.QueryRow("SELECT id_cliente_int, clave " +
 				"FROM usuarios WHERE nombre = $1;", form.usuario).Scan(&idClienteInt, &clave)
 			if err != nil {
-				log.Fatal(err)
+				log.Println(err)
 				c.JSON(500, gin.H{"resultado": false, "mensaje": err})
 			} else {
 				clienteDbByte := []byte(idClienteInt)
 				clienteDbHash, err := bcrypt.GenerateFromPassword(clienteDbByte, bcrypt.DefaultCost)
 				if err != nil {
-					log.Fatal(err)
+					log.Println(err)
 					c.JSON(500, gin.H{"resultado": false, "mensaje": "Error en BCRYPT"})
 				} else {
 					clienteDbHashString := string(clienteDbHash)
@@ -51,7 +52,7 @@ func seguridadLogin(c *gin.Context) {
 						claveUsuarioByte := []byte(form.clave)
 						claveUsuarioHash, err := bcrypt.GenerateFromPassword(claveUsuarioByte, bcrypt.DefaultCost)
 						if err != nil {
-							log.Fatal(err)
+							log.Println(err)
 							c.JSON(500, gin.H{"resultado": false, "mensaje": "Error en BCRYPT"})
 						} else {
 							hashString := string(claveUsuarioHash)
@@ -75,14 +76,14 @@ func seguridadLogin(c *gin.Context) {
 									token := jwt.New(jwt.SigningMethodHS512)
 									tokenString, err := json.Marshal(tokenRaw)
 									if err != nil {
-										log.Fatal(err)
+										log.Println(err)
 										c.JSON(500, gin.H{"resultado": false, "mensaje": "Error en JSON"})
 									}
 									token.Raw = string(tokenString)
 									secret := os.Getenv("JWT_SECRET")
 									tokenFinal, err := token.SignedString(secret)
 									if err != nil {
-										log.Fatal(err)
+										log.Println(err)
 										c.JSON(500, gin.H{"resultado": false, "mensaje": "Error en JWT"})
 									}
 									c.JSON(200, gin.H{"resultado": true, "mensaje": "Sesión iniciada!", "token": tokenFinal})
