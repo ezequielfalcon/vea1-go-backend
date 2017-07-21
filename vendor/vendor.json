@@ -1,0 +1,85 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "IkAYIhxmvTQKEJvclIZJoVh9ats=",
+			"path": "github.com/dgrijalva/jwt-go",
+			"revision": "a539ee1a749a2b895533f979515ac7e6e0f5b650",
+			"revisionTime": "2017-06-08T00:51:49Z"
+		},
+		{
+			"checksumSHA1": "BhMowD2DIKSd9qq8Pzh7Y3mh2/w=",
+			"path": "github.com/gin-contrib/sse",
+			"revision": "22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae",
+			"revisionTime": "2017-01-09T09:34:21Z"
+		},
+		{
+			"checksumSHA1": "2R2SjZ8eSZp9E+6LMKuvh86NNMs=",
+			"path": "github.com/gin-gonic/gin",
+			"revision": "7b508186dd71146cbdb3d14f2c2e1aaaa51f7e45",
+			"revisionTime": "2017-07-19T12:49:18Z"
+		},
+		{
+			"checksumSHA1": "poTKyztvE+y8D+ok3jRlnHZJ+ss=",
+			"path": "github.com/gin-gonic/gin/binding",
+			"revision": "7b508186dd71146cbdb3d14f2c2e1aaaa51f7e45",
+			"revisionTime": "2017-07-19T12:49:18Z"
+		},
+		{
+			"checksumSHA1": "+UgLC+h5OGeymvpZEIYnDCFWctA=",
+			"path": "github.com/gin-gonic/gin/json",
+			"revision": "7b508186dd71146cbdb3d14f2c2e1aaaa51f7e45",
+			"revisionTime": "2017-07-19T12:49:18Z"
+		},
+		{
+			"checksumSHA1": "yyYoWybT9cKLzno6kh1RCs+WWtE=",
+			"path": "github.com/gin-gonic/gin/render",
+			"revision": "7b508186dd71146cbdb3d14f2c2e1aaaa51f7e45",
+			"revisionTime": "2017-07-19T12:49:18Z"
+		},
+		{
+			"checksumSHA1": "cRxfZM32wP1Ry67s3jLRoYxAz/E=",
+			"path": "github.com/golang/protobuf/proto",
+			"revision": "0a4f71a498b7c4812f64969510bcb4eca251e33a",
+			"revisionTime": "2017-07-12T04:22:13Z"
+		},
+		{
+			"checksumSHA1": "rCNfFpeYqd2Tpi5qOFX8ckaQcMU=",
+			"path": "github.com/mattn/go-isatty",
+			"revision": "fc9e8d8ef48496124e79ae0df75490096eccf6fe",
+			"revisionTime": "2017-03-22T23:44:13Z"
+		},
+		{
+			"checksumSHA1": "kZScNEQ20idmssR5L8ynNj0Gsts=",
+			"path": "github.com/ugorji/go/codec",
+			"revision": "5efa3251c7f7d05e5d9704a69a984ec9f1386a40",
+			"revisionTime": "2017-06-20T10:48:52Z"
+		},
+		{
+			"checksumSHA1": "UWjVYmoHlIfHzVIskELHiJQtMOI=",
+			"path": "golang.org/x/crypto/bcrypt",
+			"revision": "4bc1c249b153ce1da9f55437759cec51fe6acabb",
+			"revisionTime": "2017-07-15T21:28:07Z"
+		},
+		{
+			"checksumSHA1": "oVPHWesOmZ02vLq2fglGvf+AMgk=",
+			"path": "golang.org/x/crypto/blowfish",
+			"revision": "4bc1c249b153ce1da9f55437759cec51fe6acabb",
+			"revisionTime": "2017-07-15T21:28:07Z"
+		},
+		{
+			"checksumSHA1": "QSy5NJwFICKehDsWtfHbcVjIZ+o=",
+			"path": "gopkg.in/go-playground/validator.v8",
+			"revision": "5f57d2222ad794d0dffb07e664ea05e2ee07d60c",
+			"revisionTime": "2016-07-18T13:41:25Z"
+		},
+		{
+			"checksumSHA1": "HRDuZArqBTO/ldtiPu1YHAQ6TDQ=",
+			"path": "gopkg.in/yaml.v2",
+			"revision": "3b4ad1db5b2a649883ff3782f5f9f6fb52be71af",
+			"revisionTime": "2017-07-13T20:15:20Z"
+		}
+	],
+	"rootPath": "vea1-go-backend"
+}
