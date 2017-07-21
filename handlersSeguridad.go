@@ -14,9 +14,9 @@ import (
 )
 
 type login struct {
-	usuario     string `form:"usuario" binding:"required"`
-	clave       string `form:"clave" binding:"required"`
-	hashCliente string `form:"cliente" binding:"required"`
+	Usuario     string `form:"usuario" binding:"required"`
+	Clave       string `form:"clave" binding:"required"`
+	HashCliente string `form:"cliente" binding:"required"`
 }
 
 type TokenStr struct {
@@ -34,9 +34,9 @@ func seguridadLogin(c *gin.Context) {
 		if c.Bind(&form) == nil {
 			var idClienteInt string
 			var clave string
-			log.Println("Usuario: " + form.usuario)
+			log.Println("Usuario: " + form.Usuario)
 			err := db.QueryRow("SELECT id_cliente_int, clave " +
-				"FROM usuarios WHERE nombre = $1;", form.usuario).Scan(&idClienteInt, &clave)
+				"FROM usuarios WHERE nombre = $1;", form.Usuario).Scan(&idClienteInt, &clave)
 			if err != nil {
 				log.Println(err)
 				c.JSON(500, gin.H{"resultado": false, "mensaje": err})
@@ -48,8 +48,8 @@ func seguridadLogin(c *gin.Context) {
 					c.JSON(500, gin.H{"resultado": false, "mensaje": "Error en BCRYPT"})
 				} else {
 					clienteDbHashString := string(clienteDbHash)
-					if clienteDbHashString == form.hashCliente {
-						claveUsuarioByte := []byte(form.clave)
+					if clienteDbHashString == form.HashCliente {
+						claveUsuarioByte := []byte(form.Clave)
 						claveUsuarioHash, err := bcrypt.GenerateFromPassword(claveUsuarioByte, bcrypt.DefaultCost)
 						if err != nil {
 							log.Println(err)
@@ -60,7 +60,7 @@ func seguridadLogin(c *gin.Context) {
 								roles, err := db.Query("SELECT roles.nombre FROM roles INNER JOIN roles_por_usuario " +
 									"ON roles.id = roles_por_usuario.id_rol " +
 									"INNER JOIN usuarios on roles_por_usuario.usuario = usuarios.nombre " +
-									"WHERE usuarios.nombre = $1;"	, form.usuario)
+									"WHERE usuarios.nombre = $1;"	, form.Usuario)
 								if err != nil {
 									c.JSON(500, gin.H{"resultado": false, "mensaje": err})
 								} else {
@@ -71,7 +71,7 @@ func seguridadLogin(c *gin.Context) {
 										rolesUsuario = append(rolesUsuario, nombre)
 									}
 									tokenRaw := &TokenStr{
-										Usuario:    form.usuario,
+										Usuario:    form.Usuario,
 										Roles:      rolesUsuario }
 									token := jwt.New(jwt.SigningMethodHS512)
 									tokenString, err := json.Marshal(tokenRaw)
