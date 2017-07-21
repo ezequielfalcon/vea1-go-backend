@@ -77,6 +77,7 @@ func seguridadLogin(c *gin.Context) {
 							} else {
 								token.Raw = string(tokenString)
 								secret := os.Getenv("JWT_SECRET")
+								log.Println("Clave JWT: " + secret)
 								tokenFinal, err := token.SignedString(secret)
 								if err != nil {
 									log.Println(err)
